@@ -167,7 +167,7 @@ const int N = 105;
 int dp[N + 5][100005];
 int n, k;
 int a[N];
-int prefix[N + 5][100005];
+int prefix[2][100005];
 const int mod = 1e9 + 7;
 
 int main()
@@ -180,7 +180,7 @@ int main()
         cin >> a[i];
     }
     dp[n + 1][k] = 1;
-    prefix[n + 1][k] = 1;
+    prefix[0][k] = 1;
    
 
     for (int i = n; i >= 1; i--)
@@ -189,16 +189,20 @@ int main()
         {
             int mn = min(k, cnt + a[i]);
             if(cnt == 0){
-                dp[i][cnt] = (dp[i][cnt] % mod + (prefix[i + 1][mn])) % mod;
+                dp[i][cnt] = (dp[i][cnt] % mod + (prefix[0][mn])) % mod;
             }
             else{
-                dp[i][cnt] = (dp[i][cnt] % mod + ((prefix[i + 1][mn] - prefix[i + 1][cnt - 1]) + mod) % mod) % mod;
+                dp[i][cnt] = (dp[i][cnt] % mod + ((prefix[0][mn] - prefix[0][cnt - 1]) + mod) % mod) % mod;
             }
           
         }
         for(int j = 0; j <= k; j++){
-            prefix[i][j] = ((j == 0 ? 0 : prefix[i][j - 1]) % mod + dp[i][j] % mod) % mod;
+            prefix[1][j] = ((j == 0 ? 0 : prefix[1][j - 1]) % mod + dp[i][j] % mod) % mod;
         }
+        for(int j = 0; j <= k; j++){
+            prefix[0][j] = prefix[1][j];
+        }
+
     
     }
 
